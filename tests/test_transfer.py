@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 BASE_URL = "http://localhost:8000/?balance=30000&reserved=20001"
 CARD = "1111111111111111"
@@ -72,9 +72,8 @@ def test_commission_formula_correct(driver):
     amount_input = wait.until(EC.presence_of_element_located(
         (By.XPATH, "//input[@placeholder='1000']")
     ))
-    amount_input.click()
-    amount_input.send_keys(Keys.CONTROL + 'a')
-    amount_input.send_keys("150")
+    # triple-click selects all text cross-platform, then type replaces it
+    ActionChains(driver).triple_click(amount_input).send_keys("150").perform()
     time.sleep(0.3)
     commission_el = driver.find_element(By.ID, "comission")
     assert commission_el.text == "15", (
