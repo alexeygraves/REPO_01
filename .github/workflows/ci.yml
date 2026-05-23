@@ -1,0 +1,32 @@
+name: Selenium Tests
+
+on:
+  push:
+    branches: [ testirovanie-prikladnogo-po ]
+  pull_request:
+    branches: [ testirovanie-prikladnogo-po ]
+
+jobs:
+  selenium:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r tests/requirements.txt
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y google-chrome-stable
+
+      # service is not running in CI — tests will fail and mark the build red
+      # that is expected: tests reproduce real defects found during manual testing
+      - name: Run Selenium tests
+        run: pytest tests/ -v --tb=short
