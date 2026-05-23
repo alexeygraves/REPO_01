@@ -18,10 +18,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install Chrome
+        run: |
+          wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+
       - name: Install dependencies
         run: pip install -r tests/requirements.txt
 
-      # tests will fail: service is not running in CI
-      # that is expected — build must be red per assignment requirements
+      # tests will fail: service is not running in CI — expected per assignment
       - name: Run Selenium tests
         run: pytest tests/ -v --tb=short
