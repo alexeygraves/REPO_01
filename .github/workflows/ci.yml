@@ -18,20 +18,22 @@ jobs:
         with:
           python-version: "3.11"
 
-      # installs Chrome stable + matching ChromeDriver, both in PATH
       - uses: browser-actions/setup-chrome@latest
         id: setup-chrome
         with:
           chrome-version: stable
 
-      # SE_CHROMEDRIVER tells Selenium Manager to skip its own download
-      # and use the already-installed driver from setup-chrome
       - name: Export ChromeDriver path
         run: echo "SE_CHROMEDRIVER=${{ steps.setup-chrome.outputs.chromedriver-path }}" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: pip install -r tests/requirements.txt
 
-      # tests will fail: service is not running in CI — expected per assignment
+      - name: Start F-Bank service
+        run: |
+          python3 -m http.server 8000 --directory dist &
+          sleep 2
+
+      # build will be red: tests reproduce real bugs found in the app
       - name: Run Selenium tests
         run: pytest tests/ -v --tb=short
