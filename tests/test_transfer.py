@@ -2,10 +2,8 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 
 BASE_URL = "http://localhost:9999"
 
@@ -22,8 +20,8 @@ def driver():
     opts.add_argument("--disable-dev-shm-usage")
     opts.add_argument("--window-size=1280,800")
 
-    svc = Service(ChromeDriverManager().install())
-    d = webdriver.Chrome(service=svc, options=opts)
+    # selenium 4.6+ has built-in driver manager, no external deps needed
+    d = webdriver.Chrome(options=opts)
     d.implicitly_wait(5)
     yield d
     d.quit()

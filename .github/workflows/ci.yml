@@ -21,12 +21,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r tests/requirements.txt
 
-      - name: Install Chrome
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y google-chrome-stable
-
-      # service is not running in CI — tests will fail and mark the build red
-      # that is expected: tests reproduce real defects found during manual testing
+      # tests will fail: service is not running in CI
+      # that is expected — build must be red per assignment requirements
       - name: Run Selenium tests
         run: pytest tests/ -v --tb=short
