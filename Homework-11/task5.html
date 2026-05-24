@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Реакция</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 40px;
+            text-align: center;
+            background: #f5f5f5;
+        }
+        #msg {
+            font-size: 18px;
+            margin-bottom: 20px;
+            min-height: 28px;
+        }
+        #btn {
+            padding: 12px 36px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #2196f3;
+            color: white;
+        }
+        #btn:disabled {
+            background: #bbb;
+            cursor: default;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="msg">Нажмите «Старт» для начала игры</div>
+    <button id="btn">Старт</button>
+    <div id="result"></div>
+
+    <script>
+        const btn = document.getElementById('btn');
+        const msg = document.getElementById('msg');
+        const result = document.getElementById('result');
+
+        let activatedAt = null;
+        let waitTimer = null;
+
+        btn.addEventListener('click', () => {
+            if (!activatedAt) {
+                startRound();
+            } else {
+                handleReaction();
+            }
+        });
+
+        function startRound() {
+            btn.disabled = true;
+            result.textContent = '';
+            activatedAt = null;
+            msg.textContent = 'Подожди... кнопка активируется через случайное время от 1 до 5 сек';
+
+            // случайная задержка 1-5 сек
+            const randomDelay = 1000 + Math.random() * 4000;
+
+            waitTimer = setTimeout(() => {
+                btn.disabled = false;
+                activatedAt = Date.now();
+                msg.textContent = 'Жми!';
+            }, randomDelay);
+        }
+
+        function handleReaction() {
+            if (!activatedAt) return;
+            const reaction = Date.now() - activatedAt;
+            activatedAt = null;
+
+            msg.textContent = 'Результат:';
+            result.textContent = reaction + ' мс';
+
+            // TODO: добавить категории — отлично/хорошо/медленно
+            btn.textContent = 'Ещё раз';
+        }
+    </script>
+</body>
+</html>
