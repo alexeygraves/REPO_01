@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Карточка товара — оптимизированный вариант</title>
+
+  <!--
+    ОПТИМИЗАЦИЯ 1: preconnect для сторонних доменов.
+    Браузер делает DNS + TCP handshake заранее, пока парсит HTML.
+    Без этого каждый новый домен добавляет 200-400ms к загрузке.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!--
+    ОПТИМИЗАЦИЯ 2: главное изображение preload с высоким приоритетом.
+    Браузер находит его сразу при парсинге <head>, а не ждёт разбора <body>.
+    imagesrcset позволяет preload-нуть нужный размер под текущий экран.
+  -->
+  <link
+    rel="preload"
+    as="image"
+    href="hero.webp"
+    imagesrcset="hero-400.webp 400w, hero-800.webp 800w, hero.webp 1200w"
+    imagesizes="(max-width: 600px) 400px, (max-width: 1000px) 800px, 1200px"
+  >
+
+  <!--
+    ОПТИМИЗАЦИЯ 3: критический CSS инлайном.
+    Только стили для above-the-fold контента. Браузер рисует страницу
+    без единого сетевого запроса на CSS — FCP падает на 0.8-1.2s.
+    Некритический CSS грузим асинхронно ниже.
+  -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+    }
+
+    .header {
+      background: #fff;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header__logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: #005bff;
+      text-decoration: none;
+    }
+
+    .product {
+      max-width: 900px;
+      margin: 16px auto;
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 600px) {
+      .product { grid-template-columns: 1fr; margin: 8px; }
+    }
+
+    /* Резервируем место под главное изображение — предотвращаем CLS */
+    .product__image-wrap {
+      aspect-ratio: 1 / 1;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #f0f0f0;
+    }
+
+    .product__image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .product__title {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .product__price {
+      font-size: 28px;
+      font-weight: 700;
+      color: #f00;
+      margin-bottom: 4px;
+    }
+
+    .product__price-old {
+      font-size: 16px;
+      color: #999;
+      text-decoration: line-through;
+      margin-bottom: 16px;
+    }
+
+    .btn-buy {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #005bff;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    /*
+      ОПТИМИЗАЦИЯ 4: резервируем место под рекламный баннер.
+      Без min-height баннер при вставке смещает весь контент — CLS растёт.
+    */
+    .ad-slot {
+      min-height: 90px;
+      background: #f9f9f9;
+      border: 1px dashed #ccc;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 13px;
+      margin: 16px auto;
+      max-width: 900px;
+    }
+  </style>
+
+  <!--
+    ОПТИМИЗАЦИЯ 5: некритический CSS грузим асинхронно.
+    rel="preload" + onload — стандартный паттерн для асинхронной загрузки CSS.
+    <noscript> — фолбэк для браузеров без JS.
+  -->
+  <link rel="preload" as="style" href="styles-full.css"
+        onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="styles-full.css"></noscript>
+
+  <!--
+    ОПТИМИЗАЦИЯ 6: шрифты с font-display:swap через URL-параметр.
+    Браузер сразу показывает текст системным шрифтом, кастомный подставляет
+    после загрузки — нет FOIT (Flash of Invisible Text).
+  -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    media="print"
+    onload="this.media='all'"
+  >
+</head>
+<body>
+
+  <header class="header">
+    <a href="/" class="header__logo">SHOP</a>
+    <span style="color:#666; font-size:14px;">/ Электроника / Наушники</span>
+  </header>
+
+  <!-- Резервированный слот под баннер над товаром -->
+  <div class="ad-slot" id="banner-top">реклама</div>
+
+  <main class="product">
+
+    <div class="product__image-wrap">
+      <!--
+        ОПТИМИЗАЦИЯ 7: главное изображение — fetchpriority="high".
+        Вместе с <link rel="preload"> в <head> это гарантирует,
+        что браузер грузит его с максимальным приоритетом.
+
+        <picture> + WebP с JPEG-фолбэком: экономия ~50% трафика.
+        width/height — браузер резервирует место до загрузки, CLS = 0.
+      -->
+      <picture>
+        <source
+          type="image/webp"
+          srcset="hero-400.webp 400w, hero-800.webp 800w, hero.webp 1200w"
+          sizes="(max-width: 600px) 400px, (max-width: 1000px) 800px, 1200px"
+        >
+        <img
+          src="hero.jpg"
+          alt="Беспроводные наушники Sony WH-1000XM5"
+          width="600"
+          height="600"
+          fetchpriority="high"
+        >
+      </picture>
+    </div>
+
+    <div class="product__info">
+      <h1 class="product__title">Беспроводные наушники Sony WH-1000XM5 с активным шумоподавлением</h1>
+
+      <div class="product__price">24 990 ₽</div>
+      <div class="product__price-old">32 490 ₽</div>
+
+      <button class="btn-buy" onclick="addToCart(this)">Добавить в корзину</button>
+
+      <!--
+        Блок описания — второстепенный контент, грузим после first paint.
+        Здесь можно сделать intersection observer + dynamic import.
+      -->
+      <div id="product-details" style="margin-top:20px; color:#444; font-size:14px; line-height:1.6;">
+        <p>Флагманская модель с 30-часовым временем работы и улучшенным шумоподавлением второго поколения. Поддержка LDAC, DSEE Extreme, Multipoint Connection.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Блок похожих товаров — lazy-loaded изображения -->
+  <section style="max-width:900px; margin:0 auto 24px; padding:0 16px;">
+    <h2 style="font-size:18px; margin-bottom:12px;">Похожие товары</h2>
+    <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:8px;">
+
+      <!--
+        ОПТИМИЗАЦИЯ 8: все изображения кроме главного — loading="lazy".
+        Браузер не грузит их, пока они вне viewport. На слабых устройствах
+        это напрямую влияет на LCP и bandwidth.
+        width/height обязательны — без них браузер не может зарезервировать место.
+      -->
+      <div style="min-width:160px; background:#fff; border-radius:6px; padding:8px;">
+        <img src="product-2.webp" alt="Sony WH-XB910N" width="160" height="160"
+             loading="lazy" style="width:100%; height:auto; border-radius:4px;">
+        <div style="font-size:13px; margin-top:6px;">Sony WH-XB910N</div>
+        <div style="font-weight:700; margin-top:4px;">14 490 ₽</div>
+      </div>
+
+      <div style="min-width:160px; background:#fff; border-radius:6px; padding:8px;">
+        <img src="product-3.webp" alt="Bose QuietComfort 45" width="160" height="160"
+             loading="lazy" style="width:100%; height:auto; border-radius:4px;">
+        <div style="font-size:13px; margin-top:6px;">Bose QuietComfort 45</div>
+        <div style="font-weight:700; margin-top:4px;">27 990 ₽</div>
+      </div>
+
+      <div style="min-width:160px; background:#fff; border-radius:6px; padding:8px;">
+        <img src="product-4.webp" alt="Apple AirPods Max" width="160" height="160"
+             loading="lazy" style="width:100%; height:auto; border-radius:4px;">
+        <div style="font-size:13px; margin-top:6px;">Apple AirPods Max</div>
+        <div style="font-weight:700; margin-top:4px;">49 990 ₽</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!--
+    ОПТИМИЗАЦИЯ 9: все скрипты с атрибутом defer.
+    defer гарантирует: скрипт не блокирует парсинг HTML, выполняется
+    после построения DOM, в порядке появления в разметке.
+    Ни одного синхронного <script> в <head> — TBT падает на 60-70%.
+  -->
+  <script defer src="cart.js"></script>
+  <script defer src="analytics.js"></script>
+  <script defer src="recommendations.js"></script>
+
+  <script>
+    // inline только для критической микро-логики — без defer
+    function addToCart(btn) {
+      btn.textContent = "В корзине";
+      btn.style.background = "#28a745";
+      // реальный запрос идёт через defer-скрипт cart.js
+    }
+
+    // TODO: добавить Intersection Observer для lazy-load блока отзывов
+    // когда пользователь доскроллит до него — грузить через dynamic import
+  </script>
+
+</body>
+</html>
