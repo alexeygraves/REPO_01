@@ -1,0 +1,7 @@
+pytest
+httpx
+fastapi
+sqlalchemy
+python-jose[cryptography]
+bcrypt
+python-multipart

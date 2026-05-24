@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -33,7 +33,7 @@ def _create_token(user_id: int, username: str, expires: Optional[timedelta] = No
     payload = {
         "sub": str(user_id),
         "username": username,
-        "exp": datetime.utcnow() + (expires or timedelta(minutes=TOKEN_EXPIRE_MINUTES))
+        "exp": datetime.now(timezone.utc) + (expires or timedelta(minutes=TOKEN_EXPIRE_MINUTES))
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
