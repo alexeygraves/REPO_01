@@ -1,0 +1,100 @@
+// Navbar — БЭМ: .navbar, .navbar__menu, etc.
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $sp-6;
+  height: 64px;
+  background: $c-white;
+  border-bottom: 1px solid $c-border;
+  box-shadow: $shadow-sm;
+  position: relative;
+  z-index: 50;
+
+  &__brand {
+    font-size: $text-xl;
+    font-weight: 700;
+    color: $c-primary;
+    letter-spacing: -.5px;
+  }
+
+  &__menu {
+    display: flex;
+    align-items: center;
+    gap: $sp-1;
+  }
+
+  &__link {
+    display: block;
+    padding: 6px 14px;
+    font-size: $text-sm;
+    font-weight: 500;
+    color: $c-text-muted;
+    border-radius: $r-md;
+    transition: color $t, background $t;
+
+    &:hover        { color: $c-primary; background: rgba($c-primary, .06); }
+    &--active      { color: $c-primary; background: rgba($c-primary, .10); }
+  }
+
+  &__actions {
+    display: flex;
+    gap: $sp-2;
+  }
+
+  // hamburger — скрыт на десктопе
+  &__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    padding: 4px;
+    border-radius: $r-md;
+    transition: background $t;
+
+    &:hover { background: $c-bg; }
+  }
+
+  &__toggle-bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: $c-text;
+    border-radius: 2px;
+    transition: transform $t, opacity $t;
+  }
+
+  // hamburger → крест при открытии
+  &__toggle--active &__toggle-bar {
+    &:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    &:nth-child(2) { opacity: 0; }
+    &:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  }
+
+  // === мобильная версия ===
+  @media (max-width: $bp-md) {
+    &__toggle { display: flex; }
+
+    &__actions { display: none; }
+
+    &__menu {
+      display: none;
+      position: absolute;
+      top: 64px; left: 0; right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      background: $c-white;
+      border-top: 1px solid $c-border;
+      box-shadow: $shadow-md;
+      padding: $sp-3;
+      gap: $sp-1;
+
+      &--open { display: flex; }
+    }
+
+    &__link { padding: 10px 14px; }
+  }
+}

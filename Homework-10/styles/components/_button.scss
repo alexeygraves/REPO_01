@@ -1,0 +1,50 @@
+// Button — БЭМ: .btn, .btn--primary, .btn--sm, etc.
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $sp-2;
+  font-weight: 500;
+  border-radius: $r-md;
+  border: 2px solid transparent;
+  outline: none;
+  white-space: nowrap;
+  user-select: none;
+  transition: background $t, color $t, border-color $t, box-shadow $t, opacity $t;
+
+  // === sizes ===
+  &--sm  { font-size: $text-sm;  padding: 5px 14px;  height: 32px; }
+  &--md  { font-size: $text-base; padding: 8px 20px;  height: 40px; }
+  &--lg  { font-size: $text-lg;  padding: 11px 28px; height: 48px; }
+
+  // === variants ===
+  &--primary {
+    background: $c-primary;
+    color: $c-white;
+    border-color: $c-primary;
+
+    &:hover        { background: $c-primary-hover; border-color: $c-primary-hover; }
+    &:active       { background: $c-primary-active; border-color: $c-primary-active; }
+    &:focus-visible { box-shadow: 0 0 0 3px rgba($c-primary, .35); }
+  }
+
+  &--secondary {
+    background: $c-white;
+    color: $c-secondary;
+    border-color: $c-border;
+
+    &:hover        { background: $c-bg; border-color: $c-secondary; color: $c-text; }
+    &:active       { background: #e5e7eb; }
+    &:focus-visible { box-shadow: 0 0 0 3px rgba($c-secondary, .2); }
+  }
+
+  &--disabled,
+  &:disabled {
+    background: $c-disabled;
+    color: $c-disabled-text;
+    border-color: $c-disabled;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

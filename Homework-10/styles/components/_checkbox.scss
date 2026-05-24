@@ -1,0 +1,75 @@
+// Checkbox & Radio — БЭМ: .checkbox, .radio
+
+.checkbox,
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-2;
+  cursor: pointer;
+  user-select: none;
+
+  &__input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid $c-border;
+    border-radius: $r-sm;
+    background: $c-white;
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    transition: background $t, border-color $t, box-shadow $t;
+
+    &:checked {
+      background: $c-primary;
+      border-color: $c-primary;
+
+      // checkmark (только для checkbox)
+      &::after {
+        content: '';
+        position: absolute;
+        top: 2px; left: 5px;
+        width: 5px; height: 9px;
+        border: 2px solid white;
+        border-top: none;
+        border-left: none;
+        transform: rotate(45deg);
+      }
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px rgba($c-primary, .25);
+      outline: none;
+    }
+  }
+
+  &__label {
+    font-size: $text-sm;
+    color: $c-text;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: .55;
+
+    .checkbox__input,
+    .radio__input { cursor: not-allowed; }
+  }
+}
+
+.radio {
+  &__input {
+    border-radius: $r-full;
+
+    &:checked::after {
+      // dot вместо checkmark
+      top: 3px; left: 3px;
+      width: 8px; height: 8px;
+      border: none;
+      border-radius: 50%;
+      background: white;
+      transform: none;
+    }
+  }
+}

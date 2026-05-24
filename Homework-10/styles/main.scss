@@ -1,0 +1,20 @@
+// === UI Kit — точка входа ===
+
+// 1. Переменные (должны быть первыми)
+@use 'variables' as *;
+
+// 2. Базовые стили
+@use 'reset';
+@use 'base';
+
+// 3. Компоненты
+@use 'components/button';
+@use 'components/input';
+@use 'components/dropdown';
+@use 'components/checkbox';
+@use 'components/card';
+@use 'components/navbar';
+
+// 4. Лейаут
+@use 'layout/container';
+@use 'layout/grid';

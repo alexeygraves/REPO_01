@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Kit — Документация</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <!-- Navbar — живой компонент, используется для навигации по странице -->
+  <nav class="navbar">
+    <a href="#" class="navbar__brand">UI Kit</a>
+    <button class="navbar__toggle" id="navToggle" aria-label="Открыть меню">
+      <span class="navbar__toggle-bar"></span>
+      <span class="navbar__toggle-bar"></span>
+      <span class="navbar__toggle-bar"></span>
+    </button>
+    <ul class="navbar__menu" id="navMenu">
+      <li class="navbar__item"><a href="#buttons"   class="navbar__link navbar__link--active">Кнопки</a></li>
+      <li class="navbar__item"><a href="#inputs"    class="navbar__link">Поля ввода</a></li>
+      <li class="navbar__item"><a href="#dropdown"  class="navbar__link">Dropdown</a></li>
+      <li class="navbar__item"><a href="#controls"  class="navbar__link">Чекбоксы</a></li>
+      <li class="navbar__item"><a href="#cards"     class="navbar__link">Карточки</a></li>
+      <li class="navbar__item"><a href="#layout"    class="navbar__link">Сетка</a></li>
+    </ul>
+    <div class="navbar__actions">
+      <a href="https://github.com/alexeygraves/REPO_01" target="_blank" class="btn btn--secondary btn--sm">GitHub</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="doc__hero">
+    <h1 class="doc__hero-title">UI Kit</h1>
+    <p class="doc__hero-sub">
+      Библиотека компонентов пользовательского интерфейса<br>
+      БЭМ &nbsp;·&nbsp; Адаптивная &nbsp;·&nbsp; SCSS
+    </p>
+  </header>
+
+  <!-- Sticky doc nav -->
+  <nav class="doc__nav" aria-label="Разделы документации">
+    <ul class="doc__nav-list">
+      <li class="doc__nav-item"><a href="#buttons">Кнопки</a></li>
+      <li class="doc__nav-item"><a href="#inputs">Поля ввода</a></li>
+      <li class="doc__nav-item"><a href="#dropdown">Dropdown</a></li>
+      <li class="doc__nav-item"><a href="#controls">Чекбоксы / Радио</a></li>
+      <li class="doc__nav-item"><a href="#cards">Карточки</a></li>
+      <li class="doc__nav-item"><a href="#layout">Сетка</a></li>
+      <li class="doc__nav-item"><a href="#navbar">Navbar</a></li>
+    </ul>
+  </nav>
+
+  <main class="doc__content">
+    <div class="container">
+
+      <!-- ===================== BUTTONS ===================== -->
+      <section class="doc__section" id="buttons">
+        <h2 class="doc__section-title">Кнопки — Button <span class="doc__badge">БЭМ: .btn</span></h2>
+        <p class="doc__section-desc">
+          Три варианта: Primary, Secondary, Disabled. Три размера: sm, md, lg.
+          Поддержка состояний hover, active, focus-visible.
+        </p>
+
+        <p class="doc__subsection-title">Варианты</p>
+        <div class="doc__demo">
+          <button class="btn btn--primary btn--md">Primary</button>
+          <button class="btn btn--secondary btn--md">Secondary</button>
+          <button class="btn btn--primary btn--md" disabled>Disabled</button>
+        </div>
+
+        <p class="doc__subsection-title">Размеры — Primary</p>
+        <div class="doc__demo">
+          <button class="btn btn--primary btn--sm">Small</button>
+          <button class="btn btn--primary btn--md">Medium</button>
+          <button class="btn btn--primary btn--lg">Large</button>
+        </div>
+
+        <p class="doc__subsection-title">Размеры — Secondary</p>
+        <div class="doc__demo">
+          <button class="btn btn--secondary btn--sm">Small</button>
+          <button class="btn btn--secondary btn--md">Medium</button>
+          <button class="btn btn--secondary btn--lg">Large</button>
+        </div>
+
+        <pre class="doc__code">&lt;!-- Primary --&gt;
+&lt;button class="btn btn--primary btn--md"&gt;Primary&lt;/button&gt;
+
+&lt;!-- Secondary --&gt;
+&lt;button class="btn btn--secondary btn--sm"&gt;Secondary&lt;/button&gt;
+
+&lt;!-- Disabled --&gt;
+&lt;button class="btn btn--primary btn--md" disabled&gt;Disabled&lt;/button&gt;</pre>
+      </section>
+
+      <!-- ===================== INPUTS ===================== -->
+      <section class="doc__section" id="inputs">
+        <h2 class="doc__section-title">Поле ввода — Input <span class="doc__badge">БЭМ: .input-field</span></h2>
+        <p class="doc__section-desc">
+          Состояния: normal, focus (кликните по полю), error. Поддержка иконки слева.
+        </p>
+
+        <div class="doc__demo doc__demo--col">
+
+          <div class="input-field" style="max-width:360px;width:100%">
+            <label class="input-field__label" for="inp-normal">Обычное поле</label>
+            <div class="input-field__wrap">
+              <input class="input-field__input" id="inp-normal" type="text" placeholder="Введите текст...">
+            </div>
+          </div>
+
+          <div class="input-field input-field--with-icon" style="max-width:360px;width:100%">
+            <label class="input-field__label" for="inp-search">С иконкой поиска</label>
+            <div class="input-field__wrap">
+              <i class="input-field__icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+              </i>
+              <input class="input-field__input" id="inp-search" type="text" placeholder="Поиск...">
+            </div>
+          </div>
+
+          <div class="input-field input-field--error" style="max-width:360px;width:100%">
+            <label class="input-field__label" for="inp-error">Поле с ошибкой</label>
+            <div class="input-field__wrap">
+              <input class="input-field__input" id="inp-error" type="email" value="неверный@" placeholder="email@example.com">
+            </div>
+            <span class="input-field__error-msg">Введите корректный адрес электронной почты</span>
+          </div>
+
+        </div>
+
+        <pre class="doc__code">&lt;!-- Normal --&gt;
+&lt;div class="input-field"&gt;
+  &lt;label class="input-field__label" for="field"&gt;Лейбл&lt;/label&gt;
+  &lt;div class="input-field__wrap"&gt;
+    &lt;input class="input-field__input" id="field" type="text" placeholder="..."&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- С иконкой --&gt;
+&lt;div class="input-field input-field--with-icon"&gt;
+  &lt;div class="input-field__wrap"&gt;
+    &lt;i class="input-field__icon"&gt;...svg...&lt;/i&gt;
+    &lt;input class="input-field__input" type="text"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Ошибка --&gt;
+&lt;div class="input-field input-field--error"&gt;
+  ...
+  &lt;span class="input-field__error-msg"&gt;Сообщение об ошибке&lt;/span&gt;
+&lt;/div&gt;</pre>
+      </section>
+
+      <!-- ===================== DROPDOWN ===================== -->
+      <section class="doc__section" id="dropdown">
+        <h2 class="doc__section-title">Выпадающий список — Dropdown <span class="doc__badge">БЭМ: .dropdown</span></h2>
+        <p class="doc__section-desc">
+          Нажмите на кнопку — откроется меню с анимацией. Клик вне — закрывается.
+        </p>
+
+        <div class="doc__demo">
+          <div class="dropdown" id="dd1">
+            <button class="btn btn--secondary btn--md dropdown__trigger">
+              Выбрать опцию <span class="dropdown__arrow">▾</span>
+            </button>
+            <ul class="dropdown__menu">
+              <li class="dropdown__item"><a href="#">Редактировать</a></li>
+              <li class="dropdown__item"><a href="#">Дублировать</a></li>
+              <li class="dropdown__item"><a href="#">Удалить</a></li>
+            </ul>
+          </div>
+
+          <div class="dropdown" id="dd2">
+            <button class="btn btn--primary btn--md dropdown__trigger">
+              Действия <span class="dropdown__arrow">▾</span>
+            </button>
+            <ul class="dropdown__menu">
+              <li class="dropdown__item"><a href="#">Экспорт CSV</a></li>
+              <li class="dropdown__item"><a href="#">Экспорт PDF</a></li>
+              <li class="dropdown__item"><a href="#">Поделиться</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <pre class="doc__code">&lt;div class="dropdown"&gt;
+  &lt;button class="btn btn--secondary btn--md dropdown__trigger"&gt;
+    Выбрать &lt;span class="dropdown__arrow"&gt;▾&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;ul class="dropdown__menu"&gt;
+    &lt;li class="dropdown__item"&gt;&lt;a href="#"&gt;Опция 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="dropdown__item"&gt;&lt;a href="#"&gt;Опция 2&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;!-- JS: element.classList.toggle('dropdown--open') --&gt;</pre>
+      </section>
+
+      <!-- ===================== CONTROLS ===================== -->
+      <section class="doc__section" id="controls">
+        <h2 class="doc__section-title">Чекбоксы и радиокнопки <span class="doc__badge">БЭМ: .checkbox / .radio</span></h2>
+        <p class="doc__section-desc">
+          Кастомные элементы управления с поддержкой состояний checked, focus, disabled.
+        </p>
+
+        <p class="doc__subsection-title">Чекбоксы</p>
+        <div class="doc__demo doc__demo--col">
+          <label class="checkbox">
+            <input class="checkbox__input" type="checkbox" checked>
+            <span class="checkbox__label">Выбранный чекбокс</span>
+          </label>
+          <label class="checkbox">
+            <input class="checkbox__input" type="checkbox">
+            <span class="checkbox__label">Невыбранный чекбокс</span>
+          </label>
+          <label class="checkbox checkbox--disabled">
+            <input class="checkbox__input" type="checkbox" disabled>
+            <span class="checkbox__label">Недоступный чекбокс</span>
+          </label>
+        </div>
+
+        <p class="doc__subsection-title">Радиокнопки</p>
+        <div class="doc__demo doc__demo--col">
+          <label class="radio">
+            <input class="radio__input" type="radio" name="plan" value="a" checked>
+            <span class="radio__label">Базовый план</span>
+          </label>
+          <label class="radio">
+            <input class="radio__input" type="radio" name="plan" value="b">
+            <span class="radio__label">Профессиональный план</span>
+          </label>
+          <label class="radio radio--disabled">
+            <input class="radio__input" type="radio" name="plan" value="c" disabled>
+            <span class="radio__label">Корпоративный план (недоступен)</span>
+          </label>
+        </div>
+
+        <pre class="doc__code">&lt;!-- Checkbox --&gt;
+&lt;label class="checkbox"&gt;
+  &lt;input class="checkbox__input" type="checkbox" checked&gt;
+  &lt;span class="checkbox__label"&gt;Подписаться на рассылку&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Radio --&gt;
+&lt;label class="radio"&gt;
+  &lt;input class="radio__input" type="radio" name="group"&gt;
+  &lt;span class="radio__label"&gt;Вариант A&lt;/span&gt;
+&lt;/label&gt;</pre>
+      </section>
+
+      <!-- ===================== CARDS ===================== -->
+      <section class="doc__section" id="cards">
+        <h2 class="doc__section-title">Карточки — Card <span class="doc__badge">БЭМ: .card</span></h2>
+        <p class="doc__section-desc">
+          Карточка с заголовком, изображением и текстом. Три размера для standalone-использования.
+          Внутри grid — заполняет ячейку целиком.
+        </p>
+
+        <p class="doc__subsection-title">Standalone-размеры</p>
+        <div class="doc__demo" style="align-items:stretch">
+
+          <div class="card card--sm">
+            <img class="card__image" src="https://picsum.photos/240/140?random=10" alt="Обложка статьи">
+            <div class="card__body">
+              <h3 class="card__title">Small</h3>
+              <p class="card__text">Маленькая карточка для компактного контента.</p>
+            </div>
+            <div class="card__footer">
+              <button class="btn btn--primary btn--sm">Читать</button>
+            </div>
+          </div>
+
+          <div class="card card--md">
+            <img class="card__image" src="https://picsum.photos/320/200?random=11" alt="Обложка статьи">
+            <div class="card__body">
+              <h3 class="card__title">Medium</h3>
+              <p class="card__text">Стандартный размер для большинства случаев использования.</p>
+            </div>
+            <div class="card__footer">
+              <button class="btn btn--primary btn--sm">Читать</button>
+              <button class="btn btn--secondary btn--sm">Сохранить</button>
+            </div>
+          </div>
+
+          <div class="card card--md">
+            <div class="card__body">
+              <h3 class="card__title">Без изображения</h3>
+              <p class="card__text">Карточка без изображения — для текстового контента, уведомлений или сводной информации.</p>
+            </div>
+            <div class="card__footer">
+              <button class="btn btn--secondary btn--sm">Подробнее</button>
+            </div>
+          </div>
+
+        </div>
+
+        <pre class="doc__code">&lt;div class="card card--md"&gt;
+  &lt;img class="card__image" src="..." alt="..."&gt;
+  &lt;div class="card__body"&gt;
+    &lt;h3 class="card__title"&gt;Заголовок&lt;/h3&gt;
+    &lt;p class="card__text"&gt;Описание&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="card__footer"&gt;
+    &lt;button class="btn btn--primary btn--sm"&gt;Читать&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+      </section>
+
+      <!-- ===================== LAYOUT ===================== -->
+      <section class="doc__section" id="layout">
+        <h2 class="doc__section-title">Сетка — Grid &amp; Flexbox <span class="doc__badge">БЭМ: .grid / .flex</span></h2>
+        <p class="doc__section-desc">
+          Grid-сетка с адаптивными колонками. На планшете — 2 колонки, на мобильном — 1.
+        </p>
+
+        <p class="doc__subsection-title">Галерея карточек — grid--3</p>
+        <div class="grid grid--3">
+          <div class="card">
+            <img class="card__image" src="https://picsum.photos/320/200?random=20" alt="">
+            <div class="card__body">
+              <h3 class="card__title">Карточка 1</h3>
+              <p class="card__text">Описание первой карточки в grid-сетке из трёх колонок.</p>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card__image" src="https://picsum.photos/320/200?random=21" alt="">
+            <div class="card__body">
+              <h3 class="card__title">Карточка 2</h3>
+              <p class="card__text">На планшете эти карточки перестроятся в 2 колонки.</p>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card__image" src="https://picsum.photos/320/200?random=22" alt="">
+            <div class="card__body">
+              <h3 class="card__title">Карточка 3</h3>
+              <p class="card__text">На мобильном — в одну колонку.</p>
+            </div>
+          </div>
+        </div>
+
+        <pre class="doc__code">&lt;!-- 3-колоночная сетка --&gt;
+&lt;div class="grid grid--3"&gt;
+  &lt;div class="card"&gt;...&lt;/div&gt;
+  &lt;div class="card"&gt;...&lt;/div&gt;
+  &lt;div class="card"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Автоматическая сетка --&gt;
+&lt;div class="grid grid--auto"&gt;...&lt;/div&gt;
+
+&lt;!-- Flex --&gt;
+&lt;div class="flex flex--between flex--gap-4"&gt;...&lt;/div&gt;</pre>
+      </section>
+
+      <!-- ===================== NAVBAR ===================== -->
+      <section class="doc__section" id="navbar">
+        <h2 class="doc__section-title">Навбар — Navbar <span class="doc__badge">БЭМ: .navbar</span></h2>
+        <p class="doc__section-desc">
+          Горизонтальное меню на десктопе. На мобильных (&lt;768px) — скрывается, появляется кнопка-гамбургер.
+          Живой пример — верхний навбар этой страницы.
+        </p>
+
+        <pre class="doc__code">&lt;nav class="navbar"&gt;
+  &lt;a href="#" class="navbar__brand"&gt;Logo&lt;/a&gt;
+
+  &lt;!-- Hamburger (видно только на мобильных) --&gt;
+  &lt;button class="navbar__toggle" id="navToggle"&gt;
+    &lt;span class="navbar__toggle-bar"&gt;&lt;/span&gt;
+    &lt;span class="navbar__toggle-bar"&gt;&lt;/span&gt;
+    &lt;span class="navbar__toggle-bar"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+
+  &lt;ul class="navbar__menu" id="navMenu"&gt;
+    &lt;li class="navbar__item"&gt;
+      &lt;a href="#" class="navbar__link navbar__link--active"&gt;Главная&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li class="navbar__item"&gt;
+      &lt;a href="#" class="navbar__link"&gt;Компоненты&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;div class="navbar__actions"&gt;
+    &lt;button class="btn btn--primary btn--sm"&gt;Войти&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+
+&lt;script&gt;
+  const toggle = document.getElementById('navToggle');
+  const menu   = document.getElementById('navMenu');
+  toggle.addEventListener('click', () => {
+    menu.classList.toggle('navbar__menu--open');
+    toggle.classList.toggle('navbar__toggle--active');
+  });
+&lt;/script&gt;</pre>
+      </section>
+
+    </div><!-- /container -->
+  </main>
+
+  <footer>
+    UI Kit &nbsp;·&nbsp; Домашнее задание 10 &nbsp;·&nbsp; Разработка прототипов программных решений
+  </footer>
+
+  <script>
+    // navbar hamburger
+    const navToggle = document.getElementById('navToggle');
+    const navMenu   = document.getElementById('navMenu');
+    navToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('navbar__menu--open');
+      navToggle.classList.toggle('navbar__toggle--active');
+    });
+
+    // close menu on link click (mobile)
+    navMenu.querySelectorAll('.navbar__link').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('navbar__menu--open');
+        navToggle.classList.remove('navbar__toggle--active');
+      });
+    });
+
+    // dropdown toggle
+    document.querySelectorAll('.dropdown').forEach(dd => {
+      dd.querySelector('.dropdown__trigger').addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = dd.classList.contains('dropdown--open');
+        // закрываем все остальные
+        document.querySelectorAll('.dropdown--open').forEach(d => d.classList.remove('dropdown--open'));
+        if (!isOpen) dd.classList.add('dropdown--open');
+      });
+    });
+
+    // клик вне dropdown — закрывает
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown--open').forEach(d => d.classList.remove('dropdown--open'));
+    });
+
+    // active nav highlight on scroll
+    const sections = document.querySelectorAll('.doc__section[id]');
+    const navLinks = document.querySelectorAll('.navbar__link');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('navbar__link--active'));
+          const active = document.querySelector(`.navbar__link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('navbar__link--active');
+        }
+      });
+    }, { threshold: .4 });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>

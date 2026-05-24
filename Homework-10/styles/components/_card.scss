@@ -1,0 +1,71 @@
+// Card — БЭМ: .card, .card__image, .card__body, etc.
+
+.card {
+  background: $c-white;
+  border: 1px solid $c-border;
+  border-radius: $r-lg;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow $t, transform $t;
+  width: 100%;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+
+  &__image {
+    width: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__body {
+    padding: $sp-4;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $sp-2;
+  }
+
+  &__title {
+    font-size: $text-lg;
+    font-weight: 600;
+    color: $c-text;
+  }
+
+  &__text {
+    font-size: $text-sm;
+    color: $c-text-muted;
+    flex: 1;
+  }
+
+  &__footer {
+    padding: $sp-3 $sp-4;
+    border-top: 1px solid $c-border;
+    display: flex;
+    align-items: center;
+    gap: $sp-2;
+  }
+
+  // === size modifiers (для standalone использования) ===
+  &--sm {
+    max-width: 240px;
+    .card__image { height: 140px; }
+  }
+
+  &--md {
+    max-width: 320px;
+    .card__image { height: 200px; }
+  }
+
+  &--lg {
+    max-width: 480px;
+    .card__image { height: 260px; }
+  }
+
+  // внутри grid — убираем max-width, карточка заполняет ячейку
+  .grid & { max-width: none; }
+}

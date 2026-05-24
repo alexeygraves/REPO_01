@@ -1,0 +1,50 @@
+// Dropdown — БЭМ: .dropdown, .dropdown__menu, etc.
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+  &__menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 180px;
+    background: $c-white;
+    border: 1px solid $c-border;
+    border-radius: $r-md;
+    box-shadow: $shadow-md;
+    padding: $sp-1 0;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity $t, transform $t, visibility $t;
+  }
+
+  &--open &__menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  &__item a {
+    display: block;
+    padding: 8px 16px;
+    font-size: $text-sm;
+    color: $c-text;
+    transition: background $t, color $t;
+
+    &:hover {
+      background: $c-bg;
+      color: $c-primary;
+    }
+  }
+
+  &__arrow {
+    display: inline-block;
+    margin-left: $sp-1;
+    transition: transform $t;
+  }
+
+  &--open &__arrow { transform: rotate(180deg); }
+}
