@@ -53,7 +53,7 @@ jobs:
           git config user.name "github-actions"
           git add screenshots/
           if git diff --staged --quiet; then
-            echo "no new screenshots"
+            echo "screenshots already committed"
           else
             git commit -m "add bug screenshots [skip ci]"
             git push
@@ -61,25 +61,53 @@ jobs:
 
           BASE="https://raw.githubusercontent.com/${REPO}/main/screenshots"
 
-          # only comment if issue does not already have a screenshot comment
-          EXISTING=$(gh api repos/${REPO}/issues/3/comments --jq '[.[].body | contains("bug-001")] | any')
-          if [ "$EXISTING" != "true" ]; then
-            gh issue comment 3 --body "**Скриншот воспроизведения бага:**
+          HAS_COMMENT_3=$(gh api "repos/${REPO}/issues/3/comments" | python3 -c "
+          import sys, json
+          comments = json.load(sys.stdin)
+          print('true' if any('bug-001' in c.get('body','') for c in comments) else 'false')
+          ")
 
-![bug-001](${BASE}/bug-001.png)
-
-Сумма перевода: 150 ₽. Комиссия отображается как **10 ₽** вместо ожидаемых **15 ₽**."
+          if [ "$HAS_COMMENT_3" != "true" ]; then
+            python3 - <<PYEOF
+          import os, urllib.request, json
+          repo = os.environ['REPO']
+          base = os.environ['BASE']
+          body = "**Screenshot (BUG-001):**\n\n![bug-001](" + base + "/bug-001.png)\n\nAmount: 150. Commission shown: **10** instead of expected **15**."
+          data = json.dumps({"body": body}).encode()
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/issues/3/comments",
+              data=data,
+              headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"], "Content-Type": "application/json"},
+              method="POST"
+          )
+          urllib.request.urlopen(req)
+          print("issue 3 comment posted")
+          PYEOF
           fi
 
-          EXISTING=$(gh api repos/${REPO}/issues/4/comments --jq '[.[].body | contains("bug-002")] | any')
-          if [ "$EXISTING" != "true" ]; then
-            gh issue comment 4 --body "**Скриншот воспроизведения бага:**
+          HAS_COMMENT_4=$(gh api "repos/${REPO}/issues/4/comments" | python3 -c "
+          import sys, json
+          comments = json.load(sys.stdin)
+          print('true' if any('bug-002' in c.get('body','') for c in comments) else 'false')
+          ")
 
-![bug-002](${BASE}/bug-002.png)
-
-Баланс: 1100 ₽, сумма перевода: 1000 ₽, комиссия: 100 ₽. Итого = 1100 ₽ = баланс. Кнопка «Перевести» недоступна, хотя перевод должен быть разрешён."
+          if [ "$HAS_COMMENT_4" != "true" ]; then
+            python3 - <<PYEOF
+          import os, urllib.request, json
+          repo = os.environ['REPO']
+          base = os.environ['BASE']
+          body = "**Screenshot (BUG-002):**\n\n![bug-002](" + base + "/bug-002.png)\n\nBalance: 1100. Amount: 1000, commission: 100. Total = 1100 = balance. Transfer button is disabled but should be active."
+          data = json.dumps({"body": body}).encode()
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/issues/4/comments",
+              data=data,
+              headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"], "Content-Type": "application/json"},
+              method="POST"
+          )
+          urllib.request.urlopen(req)
+          print("issue 4 comment posted")
+          PYEOF
           fi
 
-      # build будет красным из-за двух падающих тестов (BUG-001, BUG-002)
       - name: Run Selenium tests
         run: pytest tests/ -v --tb=short
