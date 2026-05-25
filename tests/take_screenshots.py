@@ -3,6 +3,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
@@ -31,7 +32,7 @@ try:
     amount_input = wait.until(EC.presence_of_element_located(
         (By.XPATH, "//input[@placeholder='1000']")
     ))
-    ActionChains(driver).triple_click(amount_input).send_keys("150").perform()
+    ActionChains(driver).click(amount_input).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys("150").perform()
     time.sleep(0.5)
     driver.save_screenshot("screenshots/bug-001.png")
     print("bug-001.png saved")

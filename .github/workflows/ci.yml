@@ -28,6 +28,7 @@ jobs:
         id: setup-chrome
         with:
           chrome-version: stable
+          install-chromedriver: true
 
       - name: Export ChromeDriver path
         run: echo "SE_CHROMEDRIVER=${{ steps.setup-chrome.outputs.chromedriver-path }}" >> $GITHUB_ENV

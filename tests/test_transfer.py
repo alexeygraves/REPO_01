@@ -3,6 +3,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
@@ -73,7 +74,7 @@ def test_commission_formula_correct(driver):
         (By.XPATH, "//input[@placeholder='1000']")
     ))
     # triple-click selects all text cross-platform, then type replaces it
-    ActionChains(driver).triple_click(amount_input).send_keys("150").perform()
+    ActionChains(driver).click(amount_input).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys("150").perform()
     time.sleep(0.3)
     commission_el = driver.find_element(By.ID, "comission")
     assert commission_el.text == "15", (
