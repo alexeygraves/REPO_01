@@ -1,8 +1,10 @@
+import os
 import time
 import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -19,7 +21,14 @@ def driver():
     opts.add_argument("--no-sandbox")
     opts.add_argument("--disable-dev-shm-usage")
     opts.add_argument("--window-size=1280,800")
-    d = webdriver.Chrome(options=opts)
+
+    chrome_bin = os.environ.get("CHROME_BIN")
+    if chrome_bin:
+        opts.binary_location = chrome_bin
+
+    chromedriver = os.environ.get("SE_CHROMEDRIVER")
+    service = Service(executable_path=chromedriver) if chromedriver else None
+    d = webdriver.Chrome(service=service, options=opts)
     d.implicitly_wait(3)
     yield d
     d.quit()

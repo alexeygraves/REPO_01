@@ -3,6 +3,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -15,7 +16,14 @@ opts.add_argument("--headless")
 opts.add_argument("--no-sandbox")
 opts.add_argument("--disable-dev-shm-usage")
 opts.add_argument("--window-size=1280,800")
-driver = webdriver.Chrome(options=opts)
+
+chrome_bin = os.environ.get("CHROME_BIN")
+if chrome_bin:
+    opts.binary_location = chrome_bin
+
+chromedriver = os.environ.get("SE_CHROMEDRIVER")
+service = Service(executable_path=chromedriver) if chromedriver else None
+driver = webdriver.Chrome(service=service, options=opts)
 driver.implicitly_wait(3)
 
 try:
