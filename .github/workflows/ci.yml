@@ -62,7 +62,7 @@ jobs:
             git push
           fi
 
-          BASE="https://raw.githubusercontent.com/${REPO}/main/screenshots"
+          export BASE="https://raw.githubusercontent.com/${REPO}/main/screenshots"
 
           HAS_COMMENT_3=$(gh api "repos/${REPO}/issues/3/comments" | python3 -c "
           import sys, json
