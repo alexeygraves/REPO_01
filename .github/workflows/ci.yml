@@ -1,0 +1,85 @@
+name: Selenium Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  selenium:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: browser-actions/setup-chrome@latest
+        id: setup-chrome
+        with:
+          chrome-version: stable
+
+      - name: Export ChromeDriver path
+        run: echo "SE_CHROMEDRIVER=${{ steps.setup-chrome.outputs.chromedriver-path }}" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: pip install -r tests/requirements.txt
+
+      - name: Start F-Bank service
+        run: |
+          python3 -m http.server 8000 --directory dist &
+          sleep 2
+
+      - name: Take bug screenshots
+        run: python3 tests/take_screenshots.py
+
+      - name: Commit screenshots and update issues
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "github-actions"
+          git add screenshots/
+          if git diff --staged --quiet; then
+            echo "no new screenshots"
+          else
+            git commit -m "add bug screenshots [skip ci]"
+            git push
+          fi
+
+          BASE="https://raw.githubusercontent.com/${REPO}/main/screenshots"
+
+          # only comment if issue does not already have a screenshot comment
+          EXISTING=$(gh api repos/${REPO}/issues/3/comments --jq '[.[].body | contains("bug-001")] | any')
+          if [ "$EXISTING" != "true" ]; then
+            gh issue comment 3 --body "**Скриншот воспроизведения бага:**
+
+![bug-001](${BASE}/bug-001.png)
+
+Сумма перевода: 150 ₽. Комиссия отображается как **10 ₽** вместо ожидаемых **15 ₽**."
+          fi
+
+          EXISTING=$(gh api repos/${REPO}/issues/4/comments --jq '[.[].body | contains("bug-002")] | any')
+          if [ "$EXISTING" != "true" ]; then
+            gh issue comment 4 --body "**Скриншот воспроизведения бага:**
+
+![bug-002](${BASE}/bug-002.png)
+
+Баланс: 1100 ₽, сумма перевода: 1000 ₽, комиссия: 100 ₽. Итого = 1100 ₽ = баланс. Кнопка «Перевести» недоступна, хотя перевод должен быть разрешён."
+          fi
+
+      # build будет красным из-за двух падающих тестов (BUG-001, BUG-002)
+      - name: Run Selenium tests
+        run: pytest tests/ -v --tb=short
