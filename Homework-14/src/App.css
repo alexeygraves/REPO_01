@@ -1,0 +1,199 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f4f5f7;
+    color: #333;
+}
+
+.header {
+    background: #1a73e8;
+    color: white;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.header-logo {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.header-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-name {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.btn-logout,
+.btn-login {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s;
+}
+
+.btn-logout:hover,
+.btn-login:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.net-status {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: white;
+    z-index: 200;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    white-space: nowrap;
+}
+
+.net-offline {
+    background: #d93025;
+}
+
+.net-online {
+    background: #188038;
+}
+
+.login-page {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.login-form {
+    background: white;
+    padding: 36px 32px;
+    border-radius: 10px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 380px;
+}
+
+.login-form h2 {
+    margin-bottom: 28px;
+    font-size: 22px;
+    color: #1a1a1a;
+}
+
+.field {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+}
+
+.field input {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.field input:focus {
+    border-color: #1a73e8;
+}
+
+.field-error {
+    font-size: 12px;
+    color: #d93025;
+}
+
+.api-error {
+    background: #fce8e6;
+    color: #d93025;
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.15s;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: #1557b0;
+}
+
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.home-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 36px 24px;
+}
+
+.home-page h1 {
+    margin-bottom: 10px;
+    font-size: 26px;
+}
+
+.home-page > p {
+    color: #666;
+    margin-bottom: 32px;
+    font-size: 15px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.product-card {
+    background: white;
+    padding: 24px 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    text-align: center;
+    font-size: 15px;
+    color: #444;
+}
